@@ -1,0 +1,52 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "rgn": {
+      "value": "acanlweazuresql7"
+    },
+    "databaseServer": {
+      "value": "69961cb44cbea27cd6c5a2a50c68d19ebcfa9576-7fd8c7"
+    },
+    "applicationName": {
+      "value": "AzureSquadSqlServerPool7Acc"
+    },
+    "costCenter": {
+      "value": "V0640237"
+    },
+    "sqlAdminADGroupSid": {
+      "value": "FilledInDuringRelease"
+    },
+    "tenantId": {
+      "value": "FilledInDuringRelease"
+    },
+    "sqlAdminADGroup": {
+      "value": "FilledInDuringRelease"
+    },
+    "sqlAdminPassword": {
+      "value": "FilledInDuringRelease"
+    },
+    "databaseList": {
+      "metadata": {
+      },
+      "value": [
+        {
+          "databaseEdition": "Basic",
+          "maxSizeBytes": "2147483648",
+          "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
+          "databaseName": "DelDbAfter1stDeploymentPool7Acc",
+          "eventTypesToAudit": "all"
+        }
+      ]
+    },
+    "firewallRuleList": {
+      "value": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "startIpAddress": "0.0.0.0",
+          "endIpAddress": "0.0.0.0"
+        }
+      ]
+    }
+  }
+}
