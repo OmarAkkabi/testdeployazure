@@ -5,13 +5,8 @@
     "databaseServer": {
       "type": "string"
     },
-    "costCenter": {
-      "type": "string",
-      "allowedValues": [
-        "Procurement",
-        "Marketing",
-        "IT"
-      ]
+    "databaseName": {
+      "type": "string"
     },
     "SqlAdminLogin": {
       "type": "string",
@@ -23,18 +18,12 @@
     "SqlAdminPassword": {
       "type": "securestring"
     },
-    "databaseName": {
-      "type": "string"
-    },
-    "databaseCollation": {
-      "type": "string",
-      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
-    },
-    "maxSizeBytes": {
+    "costCenter": {
       "type": "string",
       "allowedValues": [
-        "2147483648",
-        "10995116277760"
+        "Procurement",
+        "Marketing",
+        "IT"
       ]
     },
     "databaseEdition": {
@@ -92,10 +81,8 @@
       "location": "[variables('databaseServerLocation')]",
       "name": "[concat(variables('databaseServerName'), '/', string(parameters('databaseName')))]",
       "properties": {
-        "collation": "[parameters('databaseCollation')]",
         "edition": "[parameters('databaseEdition')]",
-        "defaultSecondaryLocation": "[variables('defaultSecondaryLocation')]",
-        "maxSizeBytes": "[parameters('maxSizeBytes')]"
+        "defaultSecondaryLocation": "[variables('defaultSecondaryLocation')]"
       },
       "tags": {
         "CostCenter": "[parameters('CostCenter')]"
