@@ -1,106 +1,57 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "siteName": {
-      "type": "string"
-    },
-    "hostingPlanName": {
-      "type": "string"
-    },
-    "siteLocation": {
-      "type": "string"
-    },
-    "sku": {
+    "rgn": {
       "type": "string",
-      "allowedValues": [
-        "Free",
-        "Shared",
-        "Basic",
-        "Standard"
-      ],
-      "defaultValue": "Free"
+      "metadata": {
+        "description": "The name of the ResourceGroup"
+      }
     },
-    "workerSize": {
-      "type": "string",
-      "allowedValues": [
-        "0",
-        "1",
-        "2"
-      ],
-      "defaultValue": "0"
-    },
-    "someAppSetting": {
-      "type": "string",
-      "defaultValue": "Test App Setting Value"
-    },
-    "repoUrl": {
+    "VaultInstanceName": {
       "type": "string"
     },
-    "branch": {
+    "accessPolicies": {
+      "type": "array"
+    },
+    "tenantId": {
+      "type": "string"
+    },
+    "KeyVaultEdition": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [ "Standard" ]
+    },
+    "applicationName": {
+      "type": "string"
+    },
+    "costCenter": {
       "type": "string"
     }
   },
+  "variables": {
+    "tenantId": "[parameters('tenantId')]"
+  },
   "resources": [
     {
-      "apiVersion": "2014-06-01",
-      "name": "[parameters('hostingPlanName')]",
-      "type": "Microsoft.Web/serverFarms",
-      "location": "[parameters('siteLocation')]",
-      "properties": {
-        "name": "[parameters('hostingPlanName')]",
-        "sku": "[parameters('sku')]",
-        "workerSize": "[parameters('workerSize')]",
-        "numberOfWorkers": 1
-      }
-    },
-    {
-      "apiVersion": "2014-06-01",
-      "name": "[parameters('siteName')]",
-      "type": "Microsoft.Web/Sites",
-      "location": "[parameters('siteLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
-      ],
+      "type": "Microsoft.KeyVault/vaults",
+      "name": "[parameters('VaultInstanceName')]",
+      "apiVersion": "2015-06-01",
+      "location": "West Europe",
       "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty"
+        "CostCenter": "[parameters('CostCenter')]",
+        "CreatedBy": "pipeline",
+        "ApplicationName": "[parameters('applicationName')]"
       },
       "properties": {
-        "name": "[parameters('siteName')]",
-        "serverFarm": "[parameters('hostingPlanName')]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2014-04-01",
-          "type": "config",
-          "name": "web",
-          "dependsOn": [
-            "[concat('Microsoft.Web/Sites/', parameters('siteName'))]"
-          ],
-          "properties": {
-            "appSettings": [
-              {
-                "name": "someAppSetting",
-                "value": "[parameters('someAppSetting')]"
-              }
-            ]
-          }
+        "sku": {
+          "family": "A",
+          "name": "[parameters('KeyVaultEdition')]"
         },
-        {
-          "apiVersion": "2014-04-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]",
-            "[concat('Microsoft.Web/Sites/', parameters('siteName'), '/config/web')]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('repoUrl')]",
-            "branch": "[parameters('branch')]",
-            "IsManualIntegration": true
-          }
-        }
-      ]
+        "tenantId": "[variables('tenantId')]",
+        "accessPolicies": "[parameters('accessPolicies')]",
+        "enabledForDeployment": false
+      }
     }
   ]
 }
